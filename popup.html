@@ -4,18 +4,86 @@
   <title>Email Reader</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <style>
+    .container {
+      width: 500px;
+      padding: 15px;
+    }
+    
     #emailContent {
       white-space: pre-wrap;
       font-family: monospace;
       padding: 10px;
-      width: 500px;
-      max-height: 600px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      max-height: 300px;
       overflow-y: auto;
+    }
+
+    .button-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #suggestResponse {
+      padding: 8px 16px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #suggestResponse:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .loader {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #4285f4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #suggestedResponse {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+      display: none;
+    }
+
+    .error-message {
+      color: #d93025;
+      padding: 10px;
+      border: 1px solid #d93025;
+      border-radius: 4px;
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <pre id="emailContent"></pre>
-  <script src="popup.js"></script>
+  <div class="container">
+    <pre id="emailContent"></pre>
+    <div class="button-container">
+      <button id="suggestResponse">Suggest Response</button>
+      <div class="loader" id="loader"></div>
+    </div>
+    <div id="error-message" class="error-message"></div>
+    <div id="suggestedResponse"></div>
+  </div>
+  <script src="popup.js" type="module"></script>
 </body>
 </html>

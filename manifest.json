@@ -2,13 +2,14 @@
     "manifest_version": 3,
     "name": "Email Content Reader",
     "version": "1.0",
-    "description": "Displays content of currently opened Gmail email",
+    "description": "Displays content of currently opened Gmail email and suggests responses",
     "permissions": [
       "activeTab",
       "tabs"
     ],
     "host_permissions": [
-      "https://mail.google.com/*"
+      "https://mail.google.com/*",
+      "https://api.anthropic.com/*"
     ],
     "action": {
       "default_popup": "popup.html"
@@ -18,5 +19,12 @@
         "matches": ["*://mail.google.com/*"],
         "js": ["content.js"]
       }
-    ]
+    ],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "web_accessible_resources": [{
+        "resources": [".env"],
+        "matches": ["<all_urls>"]
+    }]
   }
