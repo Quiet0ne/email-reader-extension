@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Email Content Reader",
+    "version": "1.0",
+    "description": "Displays content of currently opened Gmail email",
+    "permissions": ["activeTab"],
+    "host_permissions": [
+      "https://mail.google.com/*"
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://mail.google.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
