@@ -3,7 +3,10 @@
     "name": "Email Content Reader",
     "version": "1.0",
     "description": "Displays content of currently opened Gmail email",
-    "permissions": ["activeTab"],
+    "permissions": [
+      "activeTab",
+      "tabs"
+    ],
     "host_permissions": [
       "https://mail.google.com/*"
     ],
@@ -12,7 +15,7 @@
     },
     "content_scripts": [
       {
-        "matches": ["https://mail.google.com/*"],
+        "matches": ["*://mail.google.com/*"],
         "js": ["content.js"]
       }
     ]
