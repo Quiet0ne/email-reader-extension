@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const loader = document.getElementById('loader');
     const errorMessage = document.getElementById('error-message');
     const suggestedResponseDiv = document.getElementById('suggestedResponse');
+    const createDraftButton = document.getElementById('createDraft');
     
     let currentEmailData = null;
     let configData = null;
@@ -73,11 +74,33 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const response = await generateEmailResponse(currentEmailData, configData);
                 suggestedResponseDiv.textContent = response;
                 suggestedResponseDiv.style.display = 'block';
+                createDraftButton.style.display = 'block';
             } catch (error) {
                 showError('Error generating response: ' + error.message);
             } finally {
                 hideLoader();
             }
+        });
+
+        createDraftButton.addEventListener('click', function() {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(
+                    tabs[0].id,
+                    {
+                        action: "createDraft",
+                        response: suggestedResponseDiv.textContent
+                    },
+                    function(response) {
+                        if (chrome.runtime.lastError) {
+                            showError("Error: Please refresh the Gmail page and try again.");
+                            return;
+                        }
+                        if (response && response.success) {
+                            window.close();
+                        }
+                    }
+                );
+            });
         });
     } catch (error) {
         showError('Failed to initialize: ' + error.message);

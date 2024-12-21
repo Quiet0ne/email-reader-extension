@@ -11,6 +11,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse(emailData);
         return true;
     }
+    if (request.action === "createDraft") {
+        createDraft(request.response);
+        sendResponse({success: true});
+        return true;
+    }
 });
 
 function getSender() {
@@ -49,4 +54,30 @@ function getCleanContent() {
               .trim();
     
     return text;
+}
+
+function createDraft(responseText) {
+    // Find and click the reply button
+    const replyButton = document.querySelector('div[data-tooltip="Reply"]');
+    if (!replyButton) {
+        console.error('Reply button not found');
+        return;
+    }
+    replyButton.click();
+    
+    // Wait for reply window to open
+    setTimeout(() => {
+        // Get the compose window
+        const composeWindow = document.querySelector('div[aria-label="Message Body"]');
+        if (composeWindow) {
+            // Clear any existing content (like signatures)
+            composeWindow.innerHTML = '';
+            
+            // Set the response text
+            composeWindow.innerHTML = responseText;
+            
+            // Focus the compose window to ensure Gmail registers the change
+            composeWindow.focus();
+        }
+    }, 1000);
 }

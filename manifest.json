@@ -5,7 +5,8 @@
     "description": "Displays content of currently opened Gmail email and suggests responses",
     "permissions": [
       "activeTab",
-      "tabs"
+      "tabs",
+      "scripting"
     ],
     "host_permissions": [
       "https://mail.google.com/*",
