@@ -73,8 +73,15 @@ function createDraft(responseText) {
             // Clear any existing content (like signatures)
             composeWindow.innerHTML = '';
             
+            // Format the response text for Gmail
+            // Replace newlines with <br> tags and preserve paragraph spacing
+            const formattedResponse = responseText
+                .split('\n')
+                .map(line => line.trim())
+                .join('<br>');
+            
             // Set the response text
-            composeWindow.innerHTML = responseText;
+            composeWindow.innerHTML = formattedResponse;
             
             // Focus the compose window to ensure Gmail registers the change
             composeWindow.focus();

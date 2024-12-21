@@ -72,6 +72,16 @@
       margin-top: 10px;
       display: none;
     }
+
+    #templateSelect {
+      min-width: 150px;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    #templateSelect:hover {
+      border-color: #4285f4;
+    }
   </style>
 </head>
 <body>
@@ -79,12 +89,18 @@
     <pre id="emailContent"></pre>
     <div class="button-container">
       <button id="suggestResponse">Suggest Response</button>
+      <select id="templateSelect" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; margin-left: 10px;">
+        <option value="">Select Template</option>
+      </select>
       <div class="loader" id="loader"></div>
     </div>
     <div id="error-message" class="error-message"></div>
     <div id="suggestedResponse"></div>
     <button id="createDraft" style="display: none; margin-top: 10px; padding: 8px 16px; background-color: #34A853; color: white; border: none; border-radius: 4px; cursor: pointer;">
       Create Draft
+    </button>
+    <button id="saveAsExample" style="display: none; margin-top: 10px; padding: 8px 16px; background-color: #fbbc04; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      Save as Example
     </button>
   </div>
   <script src="popup.js" type="module"></script>

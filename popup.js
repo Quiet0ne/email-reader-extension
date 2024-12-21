@@ -1,4 +1,5 @@
 import CONFIG, { initializeConfig } from './config.js';
+import { getResponseExamples, addResponseExample, getTemplates } from './responseDatabase.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     const emailContentElement = document.getElementById('emailContent');
@@ -7,6 +8,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     const errorMessage = document.getElementById('error-message');
     const suggestedResponseDiv = document.getElementById('suggestedResponse');
     const createDraftButton = document.getElementById('createDraft');
+    const saveAsExampleButton = document.getElementById('saveAsExample');
+    const templateSelect = document.getElementById('templateSelect');
     
     let currentEmailData = null;
     let configData = null;
@@ -32,6 +35,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         configData = await initializeConfig();
         
+        const templates = getTemplates();
+        templates.forEach(template => {
+            const option = document.createElement('option');
+            option.value = template.response;
+            option.textContent = template.name;
+            templateSelect.appendChild(option);
+        });
+
+        templateSelect.addEventListener('change', function() {
+            if (this.value) {
+                suggestedResponseDiv.textContent = this.value;
+                suggestedResponseDiv.style.display = 'block';
+                createDraftButton.style.display = 'block';
+                this.value = '';
+            }
+        });
+
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {action: "getEmailContent"}, function(response) {
                 if (chrome.runtime.lastError) {
@@ -75,6 +95,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 suggestedResponseDiv.textContent = response;
                 suggestedResponseDiv.style.display = 'block';
                 createDraftButton.style.display = 'block';
+                saveAsExampleButton.style.display = 'block';
             } catch (error) {
                 showError('Error generating response: ' + error.message);
             } finally {
@@ -102,19 +123,33 @@ document.addEventListener('DOMContentLoaded', async function() {
                 );
             });
         });
+
+        saveAsExampleButton.addEventListener('click', function() {
+            addResponseExample(currentEmailData, suggestedResponseDiv.textContent);
+            showError('Response saved as example!');
+            saveAsExampleButton.style.display = 'none';
+        });
     } catch (error) {
         showError('Failed to initialize: ' + error.message);
     }
 });
 
 async function generateEmailResponse(emailData, config) {
-    const prompt = `Please suggest a professional response to this email:
+    const prompt = `Please write a professional response to this email:
     
 From: ${emailData.sender}
 Subject: ${emailData.subject}
 Content: ${emailData.content}
 
-Please write a concise and professional response that addresses the main points of the email.`;
+Please write a concise and professional response that:
+1. Is properly formatted for Gmail
+2. Uses appropriate line breaks and spacing
+3. Includes a professional greeting
+4. Has a clear signature line at the end
+5. Maintains proper paragraph spacing
+6. Does not include any markdown or special formatting characters
+
+Format the response exactly as it should appear in Gmail, with no additional instructions or explanations.`;
 
     try {
         const response = await fetch(config.CLAUDE_API_URL, {
@@ -133,7 +168,7 @@ Please write a concise and professional response that addresses the main points 
                 }],
                 temperature: 0.7,
                 max_tokens: 1024,
-                system: "You are a helpful assistant that writes professional email responses."
+                system: "You are a professional email writer. Format responses in a clean, Gmail-compatible style with appropriate spacing and line breaks. Do not include any special formatting or markdown."
             })
         });
 
