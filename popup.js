@@ -1,5 +1,6 @@
 import CONFIG, { initializeConfig } from './config.js';
 import { getResponseExamples, addResponseExample, getTemplates } from './responseDatabase.js';
+import { setTheme, initializeTheme } from './themeManager.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     const emailContentElement = document.getElementById('emailContent');
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const createDraftButton = document.getElementById('createDraft');
     const saveAsExampleButton = document.getElementById('saveAsExample');
     const templateSelect = document.getElementById('templateSelect');
+    const themeToggle = document.getElementById('themeToggle');
     
     let currentEmailData = null;
     let configData = null;
@@ -48,7 +50,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 suggestedResponseDiv.textContent = this.value;
                 suggestedResponseDiv.style.display = 'block';
                 createDraftButton.style.display = 'block';
-                this.value = '';
+            } else {
+                suggestedResponseDiv.textContent = '';
+                suggestedResponseDiv.style.display = 'none';
+                createDraftButton.style.display = 'none';
             }
         });
 
@@ -128,6 +133,16 @@ document.addEventListener('DOMContentLoaded', async function() {
             addResponseExample(currentEmailData, suggestedResponseDiv.textContent);
             showError('Response saved as example!');
             saveAsExampleButton.style.display = 'none';
+        });
+
+        initializeTheme();
+
+        themeToggle.addEventListener('click', function() {
+            chrome.storage.local.get(['theme'], function(result) {
+                const currentTheme = result.theme || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
+            });
         });
     } catch (error) {
         showError('Failed to initialize: ' + error.message);
