@@ -1,6 +1,7 @@
 import CONFIG, { initializeConfig } from './config.js';
 import { getResponseExamples, addResponseExample, getTemplates } from './responseDatabase.js';
 import { setTheme, initializeTheme } from './themeManager.js';
+import { createCalendarEvent } from './calendarManager.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     const emailContentElement = document.getElementById('emailContent');
@@ -12,7 +13,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const saveAsExampleButton = document.getElementById('saveAsExample');
     const templateSelect = document.getElementById('templateSelect');
     const themeToggle = document.getElementById('themeToggle');
-    
+    const calendarSettings = document.getElementById('calendarSettings');
+    const addToCalendarButton = document.getElementById('addToCalendar');
+
     let currentEmailData = null;
     let configData = null;
 
@@ -143,6 +146,40 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const newTheme = currentTheme === 'light' ? 'dark' : 'light';
                 setTheme(newTheme);
             });
+        });
+
+        const toggleCalendarButton = document.createElement('button');
+        toggleCalendarButton.textContent = '📅 Add to Calendar';
+        toggleCalendarButton.className = 'calendar-toggle';
+        document.querySelector('.button-container').appendChild(toggleCalendarButton);
+
+        toggleCalendarButton.addEventListener('click', () => {
+            calendarSettings.style.display = calendarSettings.style.display === 'none' ? 'block' : 'none';
+        });
+
+        addToCalendarButton.addEventListener('click', async () => {
+            try {
+                const title = document.getElementById('eventTitle').value;
+                const date = document.getElementById('eventDate').value;
+                const time = document.getElementById('eventTime').value;
+                const duration = parseInt(document.getElementById('eventDuration').value);
+
+                const startDateTime = new Date(`${date}T${time}`);
+                const endDateTime = new Date(startDateTime.getTime() + duration * 60000);
+
+                const eventDetails = {
+                    title,
+                    startDateTime: startDateTime.toISOString(),
+                    endDateTime: endDateTime.toISOString(),
+                    description: currentEmailData.content
+                };
+
+                await createCalendarEvent(eventDetails);
+                showError('Event added to calendar successfully!');
+                calendarSettings.style.display = 'none';
+            } catch (error) {
+                showError('Failed to add event: ' + error.message);
+            }
         });
     } catch (error) {
         showError('Failed to initialize: ' + error.message);

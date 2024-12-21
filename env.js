@@ -12,6 +12,9 @@ async function loadEnvironmentConfig() {
             }
         });
         
+        // Add Google client ID from manifest
+        config.GOOGLE_CLIENT_ID = '383687008437-jn2hr3356l9bn1l33bsfb63a2jc5mdl5.apps.googleusercontent.com';
+        
         return config;
     } catch (error) {
         console.error('Error loading environment config:', error);

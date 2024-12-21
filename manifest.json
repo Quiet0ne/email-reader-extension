@@ -1,17 +1,19 @@
 {
     "manifest_version": 3,
-    "name": "Email Content Reader",
+    "name": "Email Controller 1.0",
     "version": "1.0",
     "description": "Displays content of currently opened Gmail email and suggests responses",
     "permissions": [
       "activeTab",
       "tabs",
       "scripting",
-      "storage"
+      "storage",
+      "identity"
     ],
     "host_permissions": [
       "https://mail.google.com/*",
-      "https://api.anthropic.com/*"
+      "https://api.anthropic.com/*",
+      "https://www.googleapis.com/*"
     ],
     "action": {
       "default_popup": "popup.html"
@@ -28,5 +30,12 @@
     "web_accessible_resources": [{
         "resources": [".env"],
         "matches": ["<all_urls>"]
-    }]
-  }
+    }],
+    "oauth2": {
+        "client_id": "383687008437-jn2hr3356l9bn1l33bsfb63a2jc5mdl5.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/calendar",
+            "https://www.googleapis.com/auth/calendar.events"
+        ]
+    }
+}
