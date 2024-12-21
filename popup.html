@@ -18,6 +18,9 @@
     body {
         background-color: var(--background-color);
         color: var(--text-color);
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        line-height: 1.5;
+        font-size: 14px;
     }
 
     .container {
@@ -27,20 +30,21 @@
     
     #emailContent {
       white-space: pre-wrap;
-      font-family: monospace;
-      padding: 10px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      padding: 15px;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
-      margin-bottom: 15px;
-      max-height: 300px;
-      overflow-y: auto;
+      border-radius: 8px;
       background-color: var(--card-background);
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 13px;
     }
 
     .button-container {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 15px;
     }
 
     #suggestResponse {
@@ -74,12 +78,14 @@
 
     #suggestedResponse {
       margin-top: 15px;
-      padding: 10px;
+      padding: 15px;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
+      border-radius: 8px;
       background-color: var(--card-background);
-      color: var(--text-color);
       display: none;
+      line-height: 1.6;
+      font-size: 13px;
+      white-space: pre-wrap;
     }
 
     .error-message {
@@ -97,6 +103,10 @@
       color: var(--text-color);
       border: 1px solid var(--border-color);
       cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 6px;
     }
 
     #templateSelect:hover {
@@ -104,22 +114,53 @@
     }
 
     .theme-toggle {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 8px;
-        border-radius: 50%;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--card-background);
         border: 1px solid var(--border-color);
-        background: transparent;
+        border-radius: 50%;
         cursor: pointer;
-        color: var(--text-color);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        padding: 0;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.1);
+        border-color: var(--button-primary);
+    }
+
+    .theme-toggle-icon {
+        font-size: 16px;
+        line-height: 1;
+    }
+
+    button {
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    button:hover {
+        opacity: 0.9;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <button class="theme-toggle" id="themeToggle">
-        <span style="font-size: 16px;">☀️</span>
+    <button class="theme-toggle" id="themeToggle" data-theme="light">
+        <span class="theme-toggle-icon">🌙</span>
     </button>
     <pre id="emailContent"></pre>
     <div class="button-container">

@@ -7,17 +7,19 @@ const themes = {
         buttonSecondary: '#34A853',
         buttonWarning: '#fbbc04',
         error: '#d93025',
-        cardBackground: '#f8f9fa'
+        cardBackground: '#f8f9fa',
+        textSecondary: '#5f6368'
     },
     dark: {
         background: '#202124',
-        text: '#ffffff',
+        text: '#e8eaed',
         border: '#5f6368',
         buttonPrimary: '#8ab4f8',
         buttonSecondary: '#81c995',
         buttonWarning: '#fdd663',
         error: '#f28b82',
-        cardBackground: '#303134'
+        cardBackground: '#303134',
+        textSecondary: '#9aa0a6'
     }
 };
 
@@ -32,10 +34,12 @@ export function setTheme(themeName) {
     document.documentElement.style.setProperty('--error-color', theme.error);
     document.documentElement.style.setProperty('--card-background', theme.cardBackground);
     
-    // Update theme toggle icon
+    // Update theme toggle
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
-        themeToggle.innerHTML = `<span style="font-size: 16px;">${themeName === 'light' ? '☀️' : '🌙'}</span>`;
+        themeToggle.setAttribute('data-theme', themeName);
+        const iconSpan = themeToggle.querySelector('.theme-toggle-icon');
+        iconSpan.textContent = themeName === 'light' ? '☀️' : '🌙';
     }
     
     // Save theme preference
